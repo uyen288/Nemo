@@ -20,7 +20,7 @@ public interface ApiService {
     Call<List<User>> login(@Body User user);
 
     @POST("register")
-    Call<User> register(@Body User user);
+    Call<List<User>> register(@Body User user);
 
     @GET("topics")
     Call<List<Topic>> getTopics();

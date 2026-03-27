@@ -104,25 +104,22 @@ public class MainActivity extends BaseActivity {
     private void performGlobalReset() {
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
 
-            SharePrefManager.getInstance(this).clearAll();
+            // Fix: Không gọi clearAll() vì nó sẽ xóa luôn session đăng nhập (is_logged_in = false)
+            // Thay vào đó chỉ reset các settings nếu cần, hoặc đơn giản là tải lại Activity
+            // SharePrefManager.getInstance(this).clearAll();
 
             if (swipeRefresh != null) {
                 swipeRefresh.setRefreshing(false);
             }
 
             Intent intent = getIntent();
-
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
             finish();
-
             overridePendingTransition(0, 0);
-
             startActivity(intent);
-
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
-            Toast.makeText(this, "Refresh!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Refreshed!", Toast.LENGTH_SHORT).show();
 
         }, 1000);
     }

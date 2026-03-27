@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Register"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -28,6 +28,18 @@
         android:layout_marginBottom="15dp"/>
 
     <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_tertiary"
+        android:padding="10dp"
+        android:background="@drawable/bg_search_field"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -37,23 +49,35 @@
         android:textColorHint="@color/text_tertiary"
         android:padding="10dp"
         android:background="@drawable/bg_search_field"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_tertiary"
+        android:padding="10dp"
+        android:background="@drawable/bg_search_field"
         android:layout_marginBottom="25dp"/>
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Register"
         android:backgroundTint="@color/bg_primary"
         android:textColor="@color/text_secondary"
         android:padding="12dp"
         android:layout_marginBottom="15dp"/>
 
     <TextView
-        android:id="@+id/tvRegister"
+        android:id="@+id/tvLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don't have an account? Register here"
+        android:text="Already have an account? Login here"
         android:textColor="@color/bg_primary"
         android:textStyle="bold"
         android:layout_marginTop="10dp"

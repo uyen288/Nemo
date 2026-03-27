@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.example.nemo.util.SharePrefManager;
 public class LoginActivity extends BaseActivity implements LoginContract.View {
     private EditText etUsername, etPassword;
     private Button btnLogin;
+    private TextView tvRegister;
     private ProgressBar progressBar;
     private LoginContract.Presenter presenter;
 
@@ -40,12 +42,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             String password = etPassword.getText().toString().trim();
             presenter.login(username, password);
         });
+
+        tvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void initViews() {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
+        tvRegister = findViewById(R.id.tvRegister);
         progressBar = findViewById(R.id.progressBar);
     }
 
