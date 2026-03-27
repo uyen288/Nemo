@@ -14,11 +14,12 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "spanish_app.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "nemo_app.db";
+    private static final int DATABASE_VERSION = 2; // Incremented version
 
     private static final String TABLE_FAVORITES = "favorites";
     private static final String COLUMN_ID = "id";
+    private static final String COLUMN_USER_ID = "user_id"; // Added user_id
     private static final String COLUMN_WORD = "word";
     private static final String COLUMN_MEANING_EN = "meaning_en";
     private static final String COLUMN_MEANING_VI = "meaning_vi";
@@ -37,7 +38,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_FAVORITES_TABLE = "CREATE TABLE " + TABLE_FAVORITES + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + "internal_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_ID + " INTEGER,"
+                + COLUMN_USER_ID + " INTEGER,"
                 + COLUMN_WORD + " TEXT,"
                 + COLUMN_MEANING_EN + " TEXT,"
                 + COLUMN_MEANING_VI + " TEXT,"
@@ -54,14 +57,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
-        onCreate(db);
+        if (oldVersion < 2) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
+            onCreate(db);
+        }
     }
 
-    public void addFavorite(Vocabulary vocab) {
+    public void addFavorite(Vocabulary vocab, int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, vocab.getId());
+        values.put(COLUMN_USER_ID, userId);
         values.put(COLUMN_WORD, vocab.getWord());
         values.put(COLUMN_MEANING_EN, vocab.getMeaningEn());
         values.put(COLUMN_MEANING_VI, vocab.getMeaningVi());
@@ -77,16 +83,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void removeFavorite(int id) {
+    public void removeFavorite(int vocabId, int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_FAVORITES, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.delete(TABLE_FAVORITES, COLUMN_ID + " = ? AND " + COLUMN_USER_ID + " = ?", 
+                new String[]{String.valueOf(vocabId), String.valueOf(userId)});
         db.close();
     }
 
-    public boolean isFavorite(int id) {
+    public boolean isFavorite(int vocabId, int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_FAVORITES, new String[]{COLUMN_ID}, COLUMN_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_FAVORITES, new String[]{COLUMN_ID}, 
+                COLUMN_ID + "=? AND " + COLUMN_USER_ID + "=?",
+                new String[]{String.valueOf(vocabId), String.valueOf(userId)}, null, null, null, null);
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         db.close();
@@ -94,9 +102,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public List<Vocabulary> getAllFavorites() {
+    public List<Vocabulary> getAllFavorites(int userId) {
         List<Vocabulary> favoriteList = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_FAVORITES;
+        String selectQuery = "SELECT * FROM " + TABLE_FAVORITES + " WHERE " + COLUMN_USER_ID + " = " + userId;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

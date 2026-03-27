@@ -30,21 +30,23 @@ import com.example.nemo.R;
 import com.example.nemo.util.NotificationReceiver;
 import com.example.nemo.util.SharePrefManager;
 import com.example.nemo.view.activity.CollectionActivity;
+import com.example.nemo.view.activity.LoginActivity;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingFragment extends Fragment {
     private SwitchMaterial switchReminder;
     private TextView tvReminderTime;
     private SharePrefManager pref;
+    private Button btnAuth, btnLogout;
+    private View layoutUserInfo;
+    private TextView tvUserId, tvUserName;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
-                    // Nếu người dùng đồng ý cấp quyền
                     setupReminderOn();
                     Toast.makeText(getContext(), "Quyền thông báo đã được cấp!", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Nếu từ chối
                     switchReminder.setChecked(false);
                     Toast.makeText(getContext(), "Bạn cần cấp quyền để nhận nhắc nhở học tập", Toast.LENGTH_LONG).show();
                 }
@@ -66,6 +68,14 @@ public class SettingFragment extends Fragment {
         Spinner spinner = view.findViewById(R.id.spinner_language);
         Button btnCollection = view.findViewById(R.id.btn_collection);
         SwitchMaterial switchDarkMode = view.findViewById(R.id.switch_dark_mode);
+        
+        btnAuth = view.findViewById(R.id.btn_auth);
+        btnLogout = view.findViewById(R.id.btn_logout);
+        layoutUserInfo = view.findViewById(R.id.layout_user_info);
+        tvUserId = view.findViewById(R.id.tv_user_id);
+        tvUserName = view.findViewById(R.id.tv_user_name);
+
+        updateUIBasedOnAuth();
 
         // --- Setup Language ---
         String[] languages = {"English", "Tiếng Việt"};
@@ -92,26 +102,33 @@ public class SettingFragment extends Fragment {
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 pref.setDarkMode(isChecked);
-
-                String msg = isChecked ? "Applying Dark Mode..." : "Applying Light Mode...";
-                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-
                 AppCompatDelegate.setDefaultNightMode(isChecked ?
                         AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
                 if (getActivity() != null) {
                     Intent intent = new Intent(getActivity(), getActivity().getClass());
                     intent.putExtra("OPEN_SETTING", true);
-
                     startActivity(intent);
                     getActivity().finish();
-
-                    getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
         });
 
         btnCollection.setOnClickListener(v -> startActivity(new Intent(getContext(), CollectionActivity.class)));
+
+        btnAuth.setOnClickListener(v -> startActivity(new Intent(getContext(), LoginActivity.class)));
+
+        btnLogout.setOnClickListener(v -> {
+            pref.logout();
+            Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
+            updateUIBasedOnAuth();
+            
+
+            // Redirect to Login
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
 
         // --- Setup Notification ---
         switchReminder = view.findViewById(R.id.switch_reminder);
@@ -126,7 +143,7 @@ public class SettingFragment extends Fragment {
                 if (checkNotiPermission()) {
                     setupReminderOn();
                 } else {
-                    switchReminder.setChecked(false); // Tạm tắt để đợi xin quyền
+                    switchReminder.setChecked(false);
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                         requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
                     }
@@ -147,18 +164,27 @@ public class SettingFragment extends Fragment {
         });
     }
 
+    private void updateUIBasedOnAuth() {
+        if (pref.isLoggedIn()) {
+            btnAuth.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.VISIBLE);
+            layoutUserInfo.setVisibility(View.VISIBLE);
+            tvUserId.setText("User ID: " + pref.getUserId());
+            tvUserName.setText("Username: " + pref.getUsername());
+        } else {
+            btnAuth.setVisibility(View.VISIBLE);
+            btnLogout.setVisibility(View.GONE);
+            layoutUserInfo.setVisibility(View.GONE);
+        }
+    }
+
     private void changeLanguage(String langCode) {
-        SharePrefManager.getInstance(getContext()).setLanguage(langCode);
-
-        String msg = langCode.equals("vi") ? "Đang áp dụng tiếng Việt..." : "Applying English...";
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-
+        pref.setLanguage(langCode);
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         if (getActivity() != null) {
             getActivity().finish();
-            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 
@@ -189,7 +215,6 @@ public class SettingFragment extends Fragment {
 
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            // Dùng setAndAllowWhileIdle để không bị crash trên Android 12-14
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }

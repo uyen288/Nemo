@@ -2,6 +2,7 @@ package com.example.nemo.data.remote;
 
 import com.example.nemo.data.model.Grammar;
 import com.example.nemo.data.model.Topic;
+import com.example.nemo.data.model.User;
 import com.example.nemo.data.model.Vocabulary;
 
 import java.util.List;
@@ -14,6 +15,13 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
+    @POST("login")
+    Call<List<User>> login(@Body User user);
+
+    @POST("register")
+    Call<User> register(@Body User user);
+
     @GET("topics")
     Call<List<Topic>> getTopics();
 

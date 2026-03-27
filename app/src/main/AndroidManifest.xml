@@ -29,6 +29,11 @@
         </activity>
 
         <activity
+            android:name=".view.activity.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>

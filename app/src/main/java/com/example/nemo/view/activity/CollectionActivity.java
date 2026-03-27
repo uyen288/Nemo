@@ -1,5 +1,6 @@
 package com.example.nemo.view.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -23,6 +24,7 @@ import com.example.nemo.constract.IVocabularyConstract;
 import com.example.nemo.data.model.Vocabulary;
 import com.example.nemo.database.DatabaseHelper;
 import com.example.nemo.presenter.VocabularyPresenter;
+import com.example.nemo.util.SharePrefManager;
 
 import java.util.List;
 import java.util.Locale;
@@ -35,11 +37,20 @@ public class CollectionActivity extends AppCompatActivity implements IVocabulary
     private VocabularyPresenter presenter;
     private TextToSpeech tts;
     private boolean isTtsInitialized = false;
+    private int currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
+
+        if (!SharePrefManager.getInstance(this).isLoggedIn()) {
+            Toast.makeText(this, "Vui lòng đăng nhập để xem bộ sưu tập", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -61,6 +72,7 @@ public class CollectionActivity extends AppCompatActivity implements IVocabulary
         rvCollection = findViewById(R.id.rv_collection);
         rvCollection.setLayoutManager(new LinearLayoutManager(this));
 
+        currentUserId = SharePrefManager.getInstance(this).getUserId();
         dbHelper = new DatabaseHelper(this);
         presenter = new VocabularyPresenter(this);
         
@@ -75,7 +87,6 @@ public class CollectionActivity extends AppCompatActivity implements IVocabulary
                 int result = tts.setLanguage(spanish);
                 
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    // Try generic Spanish if ES specific fails
                     result = tts.setLanguage(new Locale("es"));
                 }
 
@@ -91,7 +102,7 @@ public class CollectionActivity extends AppCompatActivity implements IVocabulary
     }
 
     private void loadFavorites() {
-        List<Vocabulary> favoriteList = dbHelper.getAllFavorites();
+        List<Vocabulary> favoriteList = dbHelper.getAllFavorites(currentUserId);
         adapter = new VocabularyAdapter(this, favoriteList, presenter);
         rvCollection.setAdapter(adapter);
     }
@@ -108,22 +119,22 @@ public class CollectionActivity extends AppCompatActivity implements IVocabulary
     @Override
     protected void onResume() {
         super.onResume();
-        loadFavorites(); // Refresh list when returning
+        if (SharePrefManager.getInstance(this).isLoggedIn()) {
+            currentUserId = SharePrefManager.getInstance(this).getUserId();
+            loadFavorites();
+        }
     }
 
     @Override
     public void updateVocabularyUI(List<Vocabulary> vocabularyList) {
-        // Not used here as we load from local DB
     }
 
     @Override
     public void showProgress() {
-        // No progress bar in this activity yet
     }
 
     @Override
     public void hideProgress() {
-        // No progress bar in this activity yet
     }
 
     @Override

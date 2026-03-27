@@ -1,12 +1,14 @@
 package com.example.nemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import com.example.nemo.constract.IVocabularyConstract;
 import com.example.nemo.data.model.Vocabulary;
 import com.example.nemo.database.DatabaseHelper;
 import com.example.nemo.util.SharePrefManager;
+import com.example.nemo.view.activity.LoginActivity;
 
 import java.util.List;
 
@@ -26,12 +29,14 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
     private int expandedPosition = -1;
     private DatabaseHelper dbHelper;
     private IVocabularyConstract.IPresenter presenter;
+    private int currentUserId;
 
     public VocabularyAdapter(Context context, List<Vocabulary> vocabularyList, IVocabularyConstract.IPresenter presenter) {
         this.context = context;
         this.vocabularyList = vocabularyList;
         this.dbHelper = new DatabaseHelper(context);
         this.presenter = presenter;
+        this.currentUserId = SharePrefManager.getInstance(context).getUserId();
     }
 
     public VocabularyAdapter(Context context, List<Vocabulary> vocabularyList) {
@@ -92,19 +97,31 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
             }
         });
 
-        // Sync favorite state with DB
-        boolean isFavorite = dbHelper.isFavorite(vocab.getId());
-        vocab.setFavorite(isFavorite);
+        // Sync favorite state with DB for the current user
+        boolean isLoggedIn = SharePrefManager.getInstance(context).isLoggedIn();
+        if (isLoggedIn) {
+            boolean isFavorite = dbHelper.isFavorite(vocab.getId(), currentUserId);
+            vocab.setFavorite(isFavorite);
+        } else {
+            vocab.setFavorite(false);
+        }
 
-        holder.ivFavorite.setImageResource(R.drawable.ic_star_filled); 
+        holder.ivFavorite.setImageResource(R.drawable.ic_star_filled);
         holder.ivFavorite.setAlpha(vocab.isFavorite() ? 1.0f : 0.3f);
 
         holder.ivFavorite.setOnClickListener(v -> {
+            if (!SharePrefManager.getInstance(context).isLoggedIn()) {
+                Toast.makeText(context, "Vui lòng đăng nhập để thêm vào bộ sưu tập", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+                return;
+            }
+
             if (vocab.isFavorite()) {
-                dbHelper.removeFavorite(vocab.getId());
+                dbHelper.removeFavorite(vocab.getId(), currentUserId);
                 vocab.setFavorite(false);
             } else {
-                dbHelper.addFavorite(vocab);
+                dbHelper.addFavorite(vocab, currentUserId);
                 vocab.setFavorite(true);
             }
             notifyItemChanged(holder.getAdapterPosition());

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
+import com.example.nemo.data.model.User;
+
 import java.util.Locale;
 
 public class SharePrefManager {
@@ -17,6 +19,12 @@ public class SharePrefManager {
     private static final String KEY_REMINDER_ON = "reminder_on";
     private static final String KEY_REMINDER_HOUR = "reminder_hour";
     private static final String KEY_REMINDER_MINUTE = "reminder_minute";
+
+    private static final String KEY_USER_TOKEN = "user_token";
+    private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_USERNAME = "user_name";
+    private static final String KEY_USER_EMAIL = "user_email";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
 
     private static SharePrefManager instance;
     private SharedPreferences sharedPreferences;
@@ -31,6 +39,46 @@ public class SharePrefManager {
             instance = new SharePrefManager(context.getApplicationContext());
         }
         return instance;
+    }
+
+    public void saveUserLogin(User user) {
+        sharedPreferences.edit()
+                .putInt(KEY_USER_ID, user.getId())
+                .putString(KEY_USERNAME, user.getUsername())
+                .putString(KEY_USER_EMAIL, user.getEmail())
+                .putString(KEY_USER_TOKEN, user.getToken())
+                .putBoolean(KEY_IS_LOGGED_IN, true)
+                .apply();
+    }
+
+    public boolean isLoggedIn() {
+        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+
+    public String getUserToken() {
+        return sharedPreferences.getString(KEY_USER_TOKEN, "");
+    }
+
+    public int getUserId() {
+        return sharedPreferences.getInt(KEY_USER_ID, -1);
+    }
+
+    public String getUsername() {
+        return sharedPreferences.getString(KEY_USERNAME, "");
+    }
+
+    public String getUserEmail() {
+        return sharedPreferences.getString(KEY_USER_EMAIL, "");
+    }
+
+    public void logout() {
+        sharedPreferences.edit()
+                .remove(KEY_USER_ID)
+                .remove(KEY_USERNAME)
+                .remove(KEY_USER_EMAIL)
+                .remove(KEY_USER_TOKEN)
+                .putBoolean(KEY_IS_LOGGED_IN, false)
+                .apply();
     }
 
     // clear
