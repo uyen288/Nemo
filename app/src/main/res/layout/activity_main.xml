@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_background"
+    android:orientation="vertical"
+    android:id="@+id/main">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="12dp"
+        app:cardCornerRadius="0dp"
+        app:strokeWidth="0dp">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_bottom_nav"
+            android:padding="10dp"
+
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            app:tabMaxWidth="0dp"
+
+            app:labelVisibilityMode="selected"
+
+            app:tabIndicatorGravity="center"
+            app:tabIndicatorHeight="60dp"
+            app:tabIndicatorFullWidth="true"
+            app:tabIndicatorColor="@android:color/transparent"
+            app:tabIndicator="@drawable/bg_tab_indicator"
+
+            app:tabIconTint="@color/tab_icon_selector"
+            app:tabTextColor="@color/tab_icon_selector"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabTextAppearance="@style/TabTextAppearance" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

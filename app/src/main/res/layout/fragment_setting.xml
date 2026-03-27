@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/bg_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"
+        android:textColor="@color/text_primary" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Language"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/text_tertiary" />
+
+    <Spinner
+        android:id="@+id/spinner_language"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_spinner"
+        android:layout_marginBottom="24dp"
+        android:spinnerMode="dropdown"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Dark Mode"
+            android:textSize="16sp"
+            android:textColor="@color/text_tertiary" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_dark_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/bg_primary"/>
+    </LinearLayout>
+
+<!--    NOTI -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Daily Reminder"
+            android:textSize="16sp"
+            android:textColor="@color/text_tertiary" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/bg_primary"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_reminder_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reminder at: 19:00"
+        android:textSize="14sp"
+        android:textColor="@color/bg_primary"
+        android:padding="8dp"
+        android:layout_marginBottom="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btn_collection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Collection"
+        android:drawableStart="@drawable/ic_star_filled"
+        android:padding="12dp"
+        app:iconPadding="16dp"
+        android:textColor="@color/text_secondary"
+        android:backgroundTint="@color/bg_primary"/>
+
+</LinearLayout>
