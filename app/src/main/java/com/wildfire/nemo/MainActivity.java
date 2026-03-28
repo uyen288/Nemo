@@ -77,10 +77,10 @@ public class MainActivity extends BaseActivity {
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             switch (position) {
-                case 0: tab.setText("Home"); tab.setIcon(R.drawable.ic_home); break;
-                case 1: tab.setText("Grammar"); tab.setIcon(R.drawable.ic_grammar); break;
-                case 2: tab.setText("Quiz"); tab.setIcon(R.drawable.ic_quiz); break;
-                case 3: tab.setText("Setting"); tab.setIcon(R.drawable.ic_setting); break;
+                case 0: tab.setText("Home"); tab.setIcon(R.drawable.ic_indicator_home); break;
+                case 1: tab.setText("Grammar"); tab.setIcon(R.drawable.ic_indicator_grammar); break;
+                case 2: tab.setText("Quiz"); tab.setIcon(R.drawable.ic_indicator_quiz); break;
+                case 3: tab.setText("Setting"); tab.setIcon(R.drawable.ic_indicator_setting); break;
             }
         }).attach();
     }

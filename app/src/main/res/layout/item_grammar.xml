@@ -19,22 +19,9 @@
             android:id="@+id/iv_timer_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_timer"
             android:padding="12dp"
+            android:src="@drawable/ic_grammar"
             android:background="@drawable/bg_circle_orange_light" />
-
-        <TextView
-            android:id="@+id/tv_popular_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/bg_tag_yellow"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="4dp"
-            android:text="RECOMMEND"
-            android:textColor="@color/bg_surface"
-            android:textSize="10sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_grammar_title"

@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.nemo"
+        applicationId = "com.wildfire.nemo"
         minSdk = 32
         targetSdk = 36
         versionCode = 1

@@ -46,9 +46,7 @@ public class GrammarAdapter extends RecyclerView.Adapter<GrammarAdapter.ViewHold
         holder.tvTitle.setText(grammar.getLocalizedTitle(langCode));
         holder.tvDescription.setText(grammar.getLocalizedDescription(langCode));
 
-        // Dummy duration and popular tag logic
         holder.tvDuration.setText("15 mins");
-        holder.tvPopularTag.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
 
         holder.btnStart.setOnClickListener(v -> {
             if (listener != null) listener.onItemClick(grammar);
@@ -65,7 +63,7 @@ public class GrammarAdapter extends RecyclerView.Adapter<GrammarAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvDescription, tvDuration, tvPopularTag;
+        TextView tvTitle, tvDescription, tvDuration;
         MaterialButton btnStart;
 
         public ViewHolder(@NonNull View itemView) {
@@ -73,7 +71,6 @@ public class GrammarAdapter extends RecyclerView.Adapter<GrammarAdapter.ViewHold
             tvTitle = itemView.findViewById(R.id.tv_grammar_title);
             tvDescription = itemView.findViewById(R.id.tv_grammar_description);
             tvDuration = itemView.findViewById(R.id.tv_duration);
-            tvPopularTag = itemView.findViewById(R.id.tv_popular_tag);
             btnStart = itemView.findViewById(R.id.btn_start_lesson);
         }
     }

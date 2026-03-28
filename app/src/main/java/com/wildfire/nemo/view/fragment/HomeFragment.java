@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wildfire.nemo.R;
@@ -64,8 +65,8 @@ public class HomeFragment extends Fragment implements IHomeContract.IView {
         }
 
         if (rvLevel != null) {
-            rvLevel.setLayoutManager(new GridLayoutManager(getContext(), 3));
-            rvLevel.setNestedScrollingEnabled(false);
+            rvLevel.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            rvLevel.setNestedScrollingEnabled(true);
         }
 
         mPresenter = new HomePresenter(this);
