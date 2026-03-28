@@ -39,12 +39,7 @@
             app:tabMaxWidth="0dp"
 
             app:labelVisibilityMode="selected"
-
-            app:tabIndicatorGravity="center"
-            app:tabIndicatorHeight="60dp"
-            app:tabIndicatorFullWidth="true"
-            app:tabIndicatorColor="@android:color/transparent"
-            app:tabIndicator="@drawable/bg_tab_indicator"
+            app:tabIndicatorHeight="0dp"
 
             app:tabIconTint="@color/tab_icon_selector"
             app:tabTextColor="@color/tab_icon_selector"

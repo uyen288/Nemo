@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.nemo"
+    namespace = "com.wildfire.nemo"
     compileSdk {
         version = release(36)
     }
