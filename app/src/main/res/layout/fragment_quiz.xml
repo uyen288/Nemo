@@ -95,8 +95,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp"
-        android:visibility="gone">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,6 +110,8 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_back"
+
+
                 app:tint="@color/bg_primary" />
 
             <ProgressBar
@@ -124,10 +125,10 @@
 
             <ImageButton
                 android:id="@+id/btn_reset_quiz"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_refresh"
+                android:src="@drawable/ic_quiz_restart"
                 app:tint="@color/bg_primary" />
         </LinearLayout>
 

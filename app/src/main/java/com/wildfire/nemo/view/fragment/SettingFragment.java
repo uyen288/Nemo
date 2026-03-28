@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,13 +31,14 @@ import com.wildfire.nemo.util.SharePrefManager;
 import com.wildfire.nemo.view.activity.CollectionActivity;
 import com.wildfire.nemo.view.activity.LoginActivity;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.button.MaterialButton;
 
 public class SettingFragment extends Fragment {
     private SwitchMaterial switchReminder;
     private TextView tvReminderTime;
     private SharePrefManager pref;
-    private Button btnAuth, btnLogout;
-    private View layoutUserInfo;
+    private MaterialCardView btnAuthCard, btnLogoutCard, btnCollectionCard, layoutUserInfo;
     private TextView tvUserId, tvUserName;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
@@ -66,11 +66,11 @@ public class SettingFragment extends Fragment {
         pref = SharePrefManager.getInstance(getContext());
 
         Spinner spinner = view.findViewById(R.id.spinner_language);
-        Button btnCollection = view.findViewById(R.id.btn_collection);
+        btnCollectionCard = view.findViewById(R.id.btn_collection_card);
         SwitchMaterial switchDarkMode = view.findViewById(R.id.switch_dark_mode);
         
-        btnAuth = view.findViewById(R.id.btn_auth);
-        btnLogout = view.findViewById(R.id.btn_logout);
+        btnAuthCard = view.findViewById(R.id.btn_auth_card);
+        btnLogoutCard = view.findViewById(R.id.btn_logout_card);
         layoutUserInfo = view.findViewById(R.id.layout_user_info);
         tvUserId = view.findViewById(R.id.tv_user_id);
         tvUserName = view.findViewById(R.id.tv_user_name);
@@ -79,9 +79,44 @@ public class SettingFragment extends Fragment {
 
         // --- Setup Language ---
         String[] languages = {"English", "Tiếng Việt"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, languages);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+// Khởi tạo Adapter với Anonymous Class để can thiệp vào màu chữ
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, languages) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                // Ép màu chữ hiển thị trên Spinner thành màu TRẮNG
+                TextView tv = (TextView) v;
+                tv.setTextColor(androidx.core.content.ContextCompat.getColor(getContext(), android.R.color.white));
+                tv.setTextSize(14f);
+                // Thêm padding để chữ không dính sát mép (nếu cần)
+                tv.setPadding(10, 10, 10, 10);
+
+                return v;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) v;
+
+                tv.setTextColor(androidx.core.content.ContextCompat.getColor(getContext(), R.color.text_primary));
+
+                int p = (int) (16 * getContext().getResources().getDisplayMetrics().density);
+                tv.setPadding(p, p, p, p);
+
+                return v;
+            }
+        };
+
+// Gán Adapter vào Spinner
         spinner.setAdapter(adapter);
+
+// Thiết lập vị trí chọn hiện tại từ Preference
+
+// Thiết lập vị trí chọn hiện tại từ Preference
         spinner.setSelection(pref.getLanguage().equals("vi") ? 1 : 0);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -114,11 +149,11 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        btnCollection.setOnClickListener(v -> startActivity(new Intent(getContext(), CollectionActivity.class)));
+        btnCollectionCard.setOnClickListener(v -> startActivity(new Intent(getContext(), CollectionActivity.class)));
 
-        btnAuth.setOnClickListener(v -> startActivity(new Intent(getContext(), LoginActivity.class)));
+        btnAuthCard.setOnClickListener(v -> startActivity(new Intent(getContext(), LoginActivity.class)));
 
-        btnLogout.setOnClickListener(v -> {
+        btnLogoutCard.setOnClickListener(v -> {
             pref.logout();
             Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
             updateUIBasedOnAuth();
@@ -166,16 +201,19 @@ public class SettingFragment extends Fragment {
 
     private void updateUIBasedOnAuth() {
         if (pref.isLoggedIn()) {
-            btnAuth.setVisibility(View.GONE);
-            btnLogout.setVisibility(View.VISIBLE);
-            layoutUserInfo.setVisibility(View.VISIBLE);
+            btnAuthCard.setVisibility(View.GONE);
+            btnLogoutCard.setVisibility(View.VISIBLE);
             tvUserId.setText("User ID: " + pref.getUserId());
-            tvUserName.setText("Username: " + pref.getUsername());
+            tvUserName.setText(pref.getUsername());
         } else {
-            btnAuth.setVisibility(View.VISIBLE);
-            btnLogout.setVisibility(View.GONE);
-            layoutUserInfo.setVisibility(View.GONE);
+            btnAuthCard.setVisibility(View.VISIBLE);
+            btnLogoutCard.setVisibility(View.GONE);
+            tvUserId.setText("User ID: 0");
+            tvUserName.setText("Guest");
         }
+        // Luôn hiển thị khung user
+        // Luôn hiển thị khung user
+        layoutUserInfo.setVisibility(View.VISIBLE);
     }
 
     private void changeLanguage(String langCode) {
