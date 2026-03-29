@@ -43,9 +43,23 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
         this(context, vocabularyList, null);
     }
 
-    public void updateList(List<Vocabulary> newList) {
-        this.vocabularyList = newList;
-        notifyDataSetChanged();
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivImage, ivAudio, ivFavorite;
+        TextView tvWord, tvPhonetic, tvMeaning, tvExampleEs, tvExampleTranslated;
+        LinearLayout layoutExpand;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivImage = itemView.findViewById(R.id.iv_vocab_image);
+            tvWord = itemView.findViewById(R.id.tv_vocab_word);
+            tvPhonetic = itemView.findViewById(R.id.tv_vocab_phonetic);
+            tvMeaning = itemView.findViewById(R.id.tv_vocab_meaning);
+            ivAudio = itemView.findViewById(R.id.iv_audio);
+            ivFavorite = itemView.findViewById(R.id.iv_favorite);
+            layoutExpand = itemView.findViewById(R.id.layout_expand);
+            tvExampleEs = itemView.findViewById(R.id.tv_example_es);
+            tvExampleTranslated = itemView.findViewById(R.id.tv_example_translated);
+        }
     }
 
     @NonNull
@@ -111,7 +125,7 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
 
         holder.ivFavorite.setOnClickListener(v -> {
             if (!SharePrefManager.getInstance(context).isLoggedIn()) {
-                Toast.makeText(context, "Vui lòng đăng nhập để thêm vào bộ sưu tập", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Login for mark as favourite", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, LoginActivity.class);
                 context.startActivity(intent);
                 return;
@@ -133,22 +147,9 @@ public class VocabularyAdapter extends RecyclerView.Adapter<VocabularyAdapter.Vi
         return vocabularyList != null ? vocabularyList.size() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivImage, ivAudio, ivFavorite;
-        TextView tvWord, tvPhonetic, tvMeaning, tvExampleEs, tvExampleTranslated;
-        LinearLayout layoutExpand;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ivImage = itemView.findViewById(R.id.iv_vocab_image);
-            tvWord = itemView.findViewById(R.id.tv_vocab_word);
-            tvPhonetic = itemView.findViewById(R.id.tv_vocab_phonetic);
-            tvMeaning = itemView.findViewById(R.id.tv_vocab_meaning);
-            ivAudio = itemView.findViewById(R.id.iv_audio);
-            ivFavorite = itemView.findViewById(R.id.iv_favorite);
-            layoutExpand = itemView.findViewById(R.id.layout_expand);
-            tvExampleEs = itemView.findViewById(R.id.tv_example_es);
-            tvExampleTranslated = itemView.findViewById(R.id.tv_example_translated);
-        }
+    public void updateList(List<Vocabulary> newList) {
+        this.vocabularyList = newList;
+        notifyDataSetChanged();
     }
+
 }

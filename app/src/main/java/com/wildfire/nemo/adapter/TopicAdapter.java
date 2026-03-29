@@ -28,9 +28,15 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
         this.topicList = topicList;
     }
 
-    public void updateList(List<Topic> newList) {
-        this.topicList = newList;
-        notifyDataSetChanged();
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivTopicImage;
+        TextView tvTopicName;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivTopicImage = itemView.findViewById(R.id.iv_topic_image);
+            tvTopicName = itemView.findViewById(R.id.tv_topic_name);
+        }
     }
 
     @NonNull
@@ -71,14 +77,9 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.ViewHolder> 
         return topicList != null ? topicList.size() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivTopicImage;
-        TextView tvTopicName;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ivTopicImage = itemView.findViewById(R.id.iv_topic_image);
-            tvTopicName = itemView.findViewById(R.id.tv_topic_name);
-        }
+    public void updateList(List<Topic> newList) {
+        this.topicList = newList;
+        notifyDataSetChanged();
     }
+
 }

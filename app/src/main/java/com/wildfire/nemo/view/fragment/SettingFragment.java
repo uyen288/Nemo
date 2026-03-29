@@ -80,18 +80,15 @@ public class SettingFragment extends Fragment {
         // --- Setup Language ---
         String[] languages = {"English", "Tiếng Việt"};
 
-// Khởi tạo Adapter với Anonymous Class để can thiệp vào màu chữ
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, languages) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
 
-                // Ép màu chữ hiển thị trên Spinner thành màu TRẮNG
                 TextView tv = (TextView) v;
                 tv.setTextColor(androidx.core.content.ContextCompat.getColor(getContext(), android.R.color.white));
                 tv.setTextSize(14f);
-                // Thêm padding để chữ không dính sát mép (nếu cần)
                 tv.setPadding(10, 10, 10, 10);
 
                 return v;
@@ -111,12 +108,9 @@ public class SettingFragment extends Fragment {
             }
         };
 
-// Gán Adapter vào Spinner
         spinner.setAdapter(adapter);
 
-// Thiết lập vị trí chọn hiện tại từ Preference
 
-// Thiết lập vị trí chọn hiện tại từ Preference
         spinner.setSelection(pref.getLanguage().equals("vi") ? 1 : 0);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -211,8 +205,6 @@ public class SettingFragment extends Fragment {
             tvUserId.setText("User ID: 0");
             tvUserName.setText("Guest");
         }
-        // Luôn hiển thị khung user
-        // Luôn hiển thị khung user
         layoutUserInfo.setVisibility(View.VISIBLE);
     }
 

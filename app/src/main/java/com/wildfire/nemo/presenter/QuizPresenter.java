@@ -28,13 +28,11 @@ public class QuizPresenter implements IQuizContract.IPresenter {
     public void loadInitialData() {
         if (mView != null) mView.showProgress();
 
-        // Load Topics
         apiService.getTopics().enqueue(new Callback<List<Topic>>() {
             @Override
             public void onResponse(Call<List<Topic>> call, Response<List<Topic>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Topic> topics = new ArrayList<>();
-                    // Add "All" topic
                     Topic allTopic = new Topic();
                     allTopic.setId(-1);
                     allTopic.setNameEn("All Topics");
@@ -66,7 +64,6 @@ public class QuizPresenter implements IQuizContract.IPresenter {
     public void prepareQuiz(Integer topicId, String level) {
         if (mView != null) mView.showProgress();
 
-        // Vẫn gọi API như bình thường
         apiService.getVocabulary(null, null).enqueue(new Callback<List<Vocabulary>>() {
             @Override
             public void onResponse(Call<List<Vocabulary>> call, Response<List<Vocabulary>> response) {
@@ -76,7 +73,6 @@ public class QuizPresenter implements IQuizContract.IPresenter {
                     List<Vocabulary> allData = response.body();
                     List<Vocabulary> filteredList = new ArrayList<>();
 
-                    // --- LOGIC LỌC TẠI ĐÂY ---
                     for (Vocabulary v : allData) {
                         boolean matchesTopic = (topicId == -1 || v.getTopicId() == topicId);
                         boolean matchesLevel = (level == null || level.equalsIgnoreCase("All Levels") || v.getLevel().equalsIgnoreCase(level));

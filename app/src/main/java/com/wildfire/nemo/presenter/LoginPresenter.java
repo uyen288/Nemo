@@ -20,7 +20,6 @@ public class LoginPresenter implements LoginContract.Presenter {
         this.apiService = RetrofitClient.getApiService();
     }
 
-    // Sửa tại file: D:/016_PXU/2526_spring/mobile/0_final/Nemo/app/src/main/java/com/example/nemo/presenter/LoginPresenter.java
 
     @Override
     public void login(String username, String password) {

@@ -33,6 +33,19 @@ public class GrammarAdapter extends RecyclerView.Adapter<GrammarAdapter.ViewHold
         this.langCode = SharePrefManager.getInstance(context).getLanguage();
     }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTitle, tvDescription, tvDuration;
+        MaterialButton btnStart;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvTitle = itemView.findViewById(R.id.tv_grammar_title);
+            tvDescription = itemView.findViewById(R.id.tv_grammar_description);
+            tvDuration = itemView.findViewById(R.id.tv_duration);
+            btnStart = itemView.findViewById(R.id.btn_start_lesson);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,16 +75,9 @@ public class GrammarAdapter extends RecyclerView.Adapter<GrammarAdapter.ViewHold
         return grammarList != null ? grammarList.size() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvDescription, tvDuration;
-        MaterialButton btnStart;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvTitle = itemView.findViewById(R.id.tv_grammar_title);
-            tvDescription = itemView.findViewById(R.id.tv_grammar_description);
-            tvDuration = itemView.findViewById(R.id.tv_duration);
-            btnStart = itemView.findViewById(R.id.btn_start_lesson);
-        }
+    public void updateList(List<Grammar> newList) {
+        this.grammarList = newList;
+        notifyDataSetChanged();
     }
+
 }

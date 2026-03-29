@@ -15,11 +15,11 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "nemo_app.db";
-    private static final int DATABASE_VERSION = 2; // Incremented version
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_FAVORITES = "favorites";
     private static final String COLUMN_ID = "id";
-    private static final String COLUMN_USER_ID = "user_id"; // Added user_id
+    private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_WORD = "word";
     private static final String COLUMN_MEANING_EN = "meaning_en";
     private static final String COLUMN_MEANING_VI = "meaning_vi";

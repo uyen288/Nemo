@@ -90,7 +90,6 @@ public class Grammar implements Serializable {
         this.contentVi = contentVi;
     }
 
-    // Helper methods to get localized content
     public String getLocalizedTitle(String langCode) {
         return "vi".equalsIgnoreCase(langCode) ? titleVi : titleEn;
     }

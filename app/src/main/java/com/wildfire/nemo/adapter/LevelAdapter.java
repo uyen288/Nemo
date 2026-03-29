@@ -25,6 +25,17 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.ViewHolder> 
         this.levelList = levelList;
     }
 
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvLevelIcon;
+        TextView tvLevelDescription;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvLevelIcon = itemView.findViewById(R.id.tv_level_icon);
+            tvLevelDescription = itemView.findViewById(R.id.tv_level_description);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -72,20 +83,12 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.ViewHolder> 
         });
     }
 
-
     @Override
     public int getItemCount() {
         return levelList != null ? levelList.size() : 0;
     }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvLevelIcon;
-        TextView tvLevelDescription;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvLevelIcon = itemView.findViewById(R.id.tv_level_icon);
-            tvLevelDescription = itemView.findViewById(R.id.tv_level_description);
-        }
+    public void updateList(List<String> newList) {
+        this.levelList = newList;
+        notifyDataSetChanged();
     }
 }

@@ -12,7 +12,6 @@ import java.util.Locale;
 public class SharePrefManager {
     private static final String PREF_NAME = "AppPreferences";
 
-    // key
     private static final String KEY_IS_DARK_MODE = "is_dark_mode";
     private static final String KEY_LANGUAGE = "app_language";
 
@@ -41,6 +40,7 @@ public class SharePrefManager {
         return instance;
     }
 
+    // auth
     public void saveUserLogin(User user) {
         sharedPreferences.edit()
                 .putInt(KEY_USER_ID, user.getId())
@@ -149,7 +149,7 @@ public class SharePrefManager {
     }
 
     public int getReminderHour() {
-        return sharedPreferences.getInt(KEY_REMINDER_HOUR, 19); // mặc định 7h tối
+        return sharedPreferences.getInt(KEY_REMINDER_HOUR, 9);
     }
 
     public int getReminderMinute() {
